@@ -1,0 +1,152 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<log>
+
+  <global scope="trace">
+    <string key="concept:name" value="string"/>
+    <int key="frequency" value="int"/>
+  </global>
+
+  <global scope="event">
+    <string key="concept:name" value="string"/>
+    <string key="activity" value="string"/>
+    <date key="time:timestamp" value="date"/>
+  </global>
+
+  <classifier name="activity" keys="activity"/>
+
+  <trace>
+    <string key="concept:name" value="1"/>
+    <int key="frequency" value="30"/>
+    <event>
+      <string key="concept:name" value="a"/>
+      <string key="activity" value="a"/>
+      <date key="time:timestamp" value="2010-12-30T00:00:00"/>
+    </event>
+    <event>
+      <string key="concept:name" value="c"/>
+      <string key="activity" value="c"/>
+      <date key="time:timestamp" value="2010-12-30T00:00:01"/>
+    </event>
+    <event>
+      <string key="concept:name" value="d"/>
+      <string key="activity" value="d"/>
+      <date key="time:timestamp" value="2010-12-30T00:00:02"/>
+    </event>
+    <event>
+      <string key="concept:name" value="e"/>
+      <string key="activity" value="e"/>
+      <date key="time:timestamp" value="2010-12-30T00:00:03"/>
+    </event>
+  </trace>
+
+  <trace>
+    <string key="concept:name" value="2"/>
+    <int key="frequency" value="25"/>
+    <event>
+      <string key="concept:name" value="b"/>
+      <string key="activity" value="b"/>
+      <date key="time:timestamp" value="2010-12-30T00:00:10"/>
+    </event>
+    <event>
+      <string key="concept:name" value="c"/>
+      <string key="activity" value="c"/>
+      <date key="time:timestamp" value="2010-12-30T00:00:11"/>
+    </event>
+    <event>
+      <string key="concept:name" value="d"/>
+      <string key="activity" value="d"/>
+      <date key="time:timestamp" value="2010-12-30T00:00:12"/>
+    </event>
+    <event>
+      <string key="concept:name" value="e"/>
+      <string key="activity" value="e"/>
+      <date key="time:timestamp" value="2010-12-30T00:00:13"/>
+    </event>
+  </trace>
+
+  <trace>
+    <string key="concept:name" value="3"/>
+    <int key="frequency" value="20"/>
+    <event>
+      <string key="concept:name" value="c"/>
+      <string key="activity" value="c"/>
+      <date key="time:timestamp" value="2010-12-30T00:00:20"/>
+    </event>
+    <event>
+      <string key="concept:name" value="b"/>
+      <string key="activity" value="b"/>
+      <date key="time:timestamp" value="2010-12-30T00:00:21"/>
+    </event>
+    <event>
+      <string key="concept:name" value="d"/>
+      <string key="activity" value="d"/>
+      <date key="time:timestamp" value="2010-12-30T00:00:22"/>
+    </event>
+    <event>
+      <string key="concept:name" value="f"/>
+      <string key="activity" value="f"/>
+      <date key="time:timestamp" value="2010-12-30T00:00:23"/>
+    </event>
+  </trace>
+
+  <trace>
+    <string key="concept:name" value="4"/>
+    <int key="frequency" value="15"/>
+    <event>
+      <string key="concept:name" value="a"/>
+      <string key="activity" value="a"/>
+      <date key="time:timestamp" value="2010-12-30T00:00:30"/>
+    </event>
+    <event>
+      <string key="concept:name" value="c"/>
+      <string key="activity" value="c"/>
+      <date key="time:timestamp" value="2010-12-30T00:00:31"/>
+    </event>
+    <event>
+      <string key="concept:name" value="c"/>
+      <string key="activity" value="c"/>
+      <date key="time:timestamp" value="2010-12-30T00:00:32"/>
+    </event>
+    <event>
+      <string key="concept:name" value="d"/>
+      <string key="activity" value="d"/>
+      <date key="time:timestamp" value="2010-12-30T00:00:33"/>
+    </event>
+    <event>
+      <string key="concept:name" value="e"/>
+      <string key="activity" value="e"/>
+      <date key="time:timestamp" value="2010-12-30T00:00:34"/>
+    </event>
+  </trace>
+
+  <trace>
+    <string key="concept:name" value="5"/>
+    <int key="frequency" value="10"/>
+    <event>
+      <string key="concept:name" value="c"/>
+      <string key="activity" value="c"/>
+      <date key="time:timestamp" value="2010-12-30T00:00:40"/>
+    </event>
+    <event>
+      <string key="concept:name" value="a"/>
+      <string key="activity" value="a"/>
+      <date key="time:timestamp" value="2010-12-30T00:00:41"/>
+    </event>
+    <event>
+      <string key="concept:name" value="c"/>
+      <string key="activity" value="c"/>
+      <date key="time:timestamp" value="2010-12-30T00:00:42"/>
+    </event>
+    <event>
+      <string key="concept:name" value="d"/>
+      <string key="activity" value="d"/>
+      <date key="time:timestamp" value="2010-12-30T00:00:43"/>
+    </event>
+    <event>
+      <string key="concept:name" value="f"/>
+      <string key="activity" value="f"/>
+      <date key="time:timestamp" value="2010-12-30T00:00:44"/>
+    </event>
+  </trace>
+
+</log>
