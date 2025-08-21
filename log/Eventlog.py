@@ -4,7 +4,9 @@ import xml.etree.ElementTree as ET
 from pm4py.statistics.variants.log import get as variants_module
 
 from model.Petrinet import Place, Transition, InArc, OutArc, Petrinet
+from model.Processtree import Node, Seq, BinaryChoice, Choice, BinaryParallel, Parallel, Loop, StochasticProcessTree
 
+from pm4py.objects.process_tree.obj import Operator
 
 class Event:
 
@@ -252,6 +254,46 @@ class Eventlog:
         return Petrinet(net, im, fm, places, transitions, inarcs, outarcs, dir_places, dir_transitions, tr2lab,
                         pl_start, pl_end, self.get_max_activities())
 
+    def import_PT_pnml(self, filename):
+        global node_id, nodes, size_pi
+
+        node_id, nodes, size_pi = -1, [], 0
+        tree = pm4py.read_ptml(filename)
+
+        def convert_tree(tree_node):
+            global node_id, nodes, size_pi
+
+            if tree_node.operator is None:
+                return Node(tree_node.label if tree_node.label is not None else "")
+            else:
+                new_node, children = None, [convert_tree(child) for child in tree_node.children]
+                node_id += 1
+                if tree_node.operator == Operator.SEQUENCE:
+                    new_node = Seq(node_id, children)
+                elif tree_node.operator == Operator.LOOP:
+                    new_node = Loop(node_id, children, size_pi, max(self.max_activities.values()), self.language_pm4py)
+                    size_pi += 1
+                elif tree_node.operator == Operator.XOR:
+                    if len(children) == 2:
+                        new_node = BinaryChoice(node_id, children, size_pi)
+                        size_pi += 1
+                    else:
+                        new_node = Choice(node_id, children, size_pi, size_pi + len(tree_node.children) - 1)
+                        size_pi += len(tree_node.children)
+                elif tree_node.operator == Operator.PARALLEL:
+                    if len(children) == 2:
+                        new_node = BinaryParallel(node_id, children, size_pi, self.language_pm4py)
+                        size_pi += 1
+                    else:
+                        new_node = Parallel(node_id, children, size_pi, size_pi + len(tree_node.children) - 1,
+                                            self.language_pm4py)
+                        size_pi += len(tree_node.children)
+                nodes.append(new_node)
+                return new_node
+
+        root = convert_tree(tree._get_root())
+        return StochasticProcessTree(tree, root, nodes, size_pi, 0)
+
     ####################################################################################################
 
     def discover_pn_alpha(self):
@@ -354,5 +396,49 @@ class Eventlog:
 
         return Petrinet(net, im, fm, places, transitions, inarcs, outarcs, dir_places, dir_transitions, tr2lab,
                         pl_start, pl_end, self.get_max_activities())
+
+    def discover_pt_inductive(self, noise_threshold=0):
+        global node_id, nodes, size_pi
+
+        node_id, nodes, size_pi = -1, [], 0
+        tree = pm4py.discover_process_tree_inductive(self.log,
+                                                     case_id_key="case:concept:name",
+                                                     activity_key="concept:name",
+                                                     timestamp_key="time:timestamp",
+                                                     noise_threshold=noise_threshold)
+
+        def convert_tree(tree_node):
+            global node_id, nodes, size_pi
+
+            if tree_node.operator is None:
+                return Node(tree_node.label if tree_node.label is not None else "")
+            else:
+                new_node, children = None, [convert_tree(child) for child in tree_node.children]
+                node_id += 1
+                if tree_node.operator == Operator.SEQUENCE:
+                    new_node = Seq(node_id, children)
+                elif tree_node.operator == Operator.LOOP:
+                    new_node = Loop(node_id, children, size_pi, max(self.max_activities.values()), self.language_pm4py)
+                    size_pi += 1
+                elif tree_node.operator == Operator.XOR:
+                    if len(children) == 2:
+                        new_node = BinaryChoice(node_id, children, size_pi)
+                        size_pi += 1
+                    else:
+                        new_node = Choice(node_id, children, size_pi, size_pi + len(tree_node.children) - 1)
+                        size_pi += len(tree_node.children)
+                elif tree_node.operator == Operator.PARALLEL:
+                    if len(children) == 2:
+                        new_node = BinaryParallel(node_id, children, size_pi, self.language_pm4py)
+                        size_pi += 1
+                    else:
+                        new_node = Parallel(node_id, children, size_pi, size_pi + len(tree_node.children) - 1,
+                                            self.language_pm4py)
+                        size_pi += len(tree_node.children)
+                nodes.append(new_node)
+                return new_node
+
+        root = convert_tree(tree._get_root())
+        return StochasticProcessTree(tree, root, nodes, size_pi, noise_threshold)
 
     ####################################################################################################

@@ -76,3 +76,17 @@ def test2_petrinet():
 
     print(pn_alpha)
     print(pn_inductive)
+
+def test1_processtree():
+
+    ev = Eventlog("../toy_data/ex1.xes")
+    pt_inductive = ev.discover_pt_inductive()
+
+    print(pt_inductive)
+
+def test2_processtree():
+
+    ev = Eventlog("../toy_data/ex1.xes")
+    pt_inductive = ev.import_PT_pnml("../toy_data/ex1_inductive.ptml")
+
+    print(pt_inductive)
