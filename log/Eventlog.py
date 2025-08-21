@@ -3,6 +3,8 @@ import xml.etree.ElementTree as ET
 
 from pm4py.statistics.variants.log import get as variants_module
 
+from model.Petrinet import Place, Transition, InArc, OutArc, Petrinet
+
 
 class Event:
 
@@ -140,5 +142,217 @@ class Eventlog:
                 if count > max_activities[activity]:
                     max_activities[activity] = count
         return max_activities
+
+    ####################################################################################################
+
+    def import_PN_pnml(self, filename):
+
+        net, im, fm = pm4py.read_pnml(filename)
+
+        places, dir_places = [], {}
+        pl_start, pl_end = None, None
+        implace, fmplace = next(iter(im)).name, next(iter(fm)).name
+
+        for p, place in enumerate(net.places):
+            if place.name == implace:
+                place.name = "start"
+                pl_start = Place("start")
+                dir_places[place] = pl_start
+                places.append(pl_start)
+            elif place.name == fmplace:
+                place.name = "end"
+                pl_end = Place("end")
+                dir_places[place] = pl_end
+                places.append(pl_end)
+            else:
+                place.name = "p" + str(p)
+                pl_i = Place("p" + str(p))
+                dir_places[place] = pl_i
+                places.append(pl_i)
+
+        transitions, dir_transitions, tr2lab = [], {}, {}
+        for t, transition in enumerate(net.transitions):
+            transition.name = "t" + str(t)
+            tr_i = Transition("t" + str(t), transition.label)
+            dir_transitions[transition] = tr_i
+            transitions.append(tr_i)
+            tr2lab["t" + str(t)] = transition.label
+
+        inarcs, outarcs = [], []
+        for arc in net.arcs:
+            if isinstance(arc.source, pm4py.objects.petri_net.obj.PetriNet.Place):
+                source = dir_places[arc.source]
+                target = dir_transitions[arc.target]
+                inarcs.append(InArc(source, target))
+            elif isinstance(arc.source, pm4py.objects.petri_net.obj.PetriNet.Transition):
+                source = dir_transitions[arc.source]
+                target = dir_places[arc.target]
+                outarcs.append(OutArc(source, target))
+
+        return Petrinet(net, im, fm, places, transitions, inarcs, outarcs, dir_places, dir_transitions, tr2lab,
+                        pl_start, pl_end, self.get_max_activities())
+
+    def import_SPN_pnml(self, filename):
+
+        net, im, fm = pm4py.read_pnml(filename)
+
+        root = ET.parse(filename).getroot()
+        ns = {'pnml': 'http://www.pnml.org/version-2009/grammar/pnml'}
+        element_to_parent, weights = {}, {}
+        for parent in root.iter():
+            for child in parent:
+                element_to_parent[child] = parent  # Store parent of each child
+        for toolspecific in root.findall(".//toolspecific", ns):
+            if toolspecific.attrib.get("tool") == "StochasticPetriNet":
+                parent = element_to_parent.get(toolspecific)
+                if parent is not None:
+                    properties = {prop.attrib["key"]: prop.text for prop in toolspecific.findall("property", ns)}
+                    weights[parent.attrib.get('id', 'Unknown')] = float(properties["weight"])
+
+        places, dir_places = [], {}
+        pl_start, pl_end = None, None
+        implace, fmplace = next(iter(im)).name, next(iter(fm)).name
+
+        for p, place in enumerate(net.places):
+            if place.name == implace:
+                place.name = "start"
+                pl_start = Place("start")
+                dir_places[place] = pl_start
+                places.append(pl_start)
+            elif place.name == fmplace:
+                place.name = "end"
+                pl_end = Place("end")
+                dir_places[place] = pl_end
+                places.append(pl_end)
+            else:
+                place.name = "p" + str(p)
+                pl_i = Place(place.name)
+                dir_places[place] = pl_i
+                places.append(pl_i)
+
+        transitions, dir_transitions, tr2lab, previous_name = [], {}, {}, {}
+        for t, transition in enumerate(net.transitions):
+            tr_i = Transition(transition.name, transition.label)
+            tr_i.set_weight(weights[transition.name])
+            dir_transitions[transition] = tr_i
+            transitions.append(tr_i)
+            tr2lab[transition.name] = transition.label
+
+        inarcs, outarcs = [], []
+        for arc in net.arcs:
+            if isinstance(arc.source, pm4py.objects.petri_net.obj.PetriNet.Place):
+                source = dir_places[arc.source]
+                target = dir_transitions[arc.target]
+                inarcs.append(InArc(source, target))
+            elif isinstance(arc.source, pm4py.objects.petri_net.obj.PetriNet.Transition):
+                source = dir_transitions[arc.source]
+                target = dir_places[arc.target]
+                outarcs.append(OutArc(source, target))
+
+        return Petrinet(net, im, fm, places, transitions, inarcs, outarcs, dir_places, dir_transitions, tr2lab,
+                        pl_start, pl_end, self.get_max_activities())
+
+    ####################################################################################################
+
+    def discover_pn_alpha(self):
+
+        net, im, fm = pm4py.discovery.discover_petri_net_alpha(self.log,
+                                                               case_id_key="case:concept:name",
+                                                               activity_key="concept:name",
+                                                               timestamp_key="time:timestamp")
+
+        places, dir_places = [], {}
+        pl_start, pl_end = None, None
+        implace, fmplace = next(iter(im)).name, next(iter(fm)).name
+
+        for p, place in enumerate(net.places):
+            if place.name == implace:
+                place.name = "start"
+                pl_start = Place("start")
+                dir_places[place] = pl_start
+                places.append(pl_start)
+            elif place.name == fmplace:
+                place.name = "end"
+                pl_end = Place("end")
+                dir_places[place] = pl_end
+                places.append(pl_end)
+            else:
+                place.name = "p" + str(p)
+                pl_i = Place("p" + str(p))
+                dir_places[place] = pl_i
+                places.append(pl_i)
+
+        transitions, dir_transitions, tr2lab = [], {}, {}
+        for t, transition in enumerate(net.transitions):
+            transition.name = "t" + str(t)
+            tr_i = Transition("t" + str(t), transition.label)
+            dir_transitions[transition] = tr_i
+            transitions.append(tr_i)
+            tr2lab["t" + str(t)] = transition.label
+
+        inarcs, outarcs = [], []
+        for arc in net.arcs:
+            if isinstance(arc.source, pm4py.objects.petri_net.obj.PetriNet.Place):
+                source = dir_places[arc.source]
+                target = dir_transitions[arc.target]
+                inarcs.append(InArc(source, target))
+            elif isinstance(arc.source, pm4py.objects.petri_net.obj.PetriNet.Transition):
+                source = dir_transitions[arc.source]
+                target = dir_places[arc.target]
+                outarcs.append(OutArc(source, target))
+
+        return Petrinet(net, im, fm, places, transitions, inarcs, outarcs, dir_places, dir_transitions, tr2lab,
+                        pl_start, pl_end, self.get_max_activities())
+
+    def discover_pn_inductive(self, noise_threshold=0):
+
+        net, im, fm = pm4py.discovery.discover_petri_net_inductive(self.log,
+                                                                   case_id_key="case:concept:name",
+                                                                   activity_key="concept:name",
+                                                                   timestamp_key="time:timestamp",
+                                                                   noise_threshold=noise_threshold)
+
+        places, dir_places = [], {}
+        pl_start, pl_end = None, None
+        implace, fmplace = next(iter(im)).name, next(iter(fm)).name
+
+        for p, place in enumerate(net.places):
+            if place.name == implace:
+                place.name = "start"
+                pl_start = Place("start")
+                dir_places[place] = pl_start
+                places.append(pl_start)
+            elif place.name == fmplace:
+                place.name = "end"
+                pl_end = Place("end")
+                dir_places[place] = pl_end
+                places.append(pl_end)
+            else:
+                place.name = "p" + str(p)
+                pl_i = Place("p" + str(p))
+                dir_places[place] = pl_i
+                places.append(pl_i)
+
+        transitions, dir_transitions, tr2lab = [], {}, {}
+        for t, transition in enumerate(net.transitions):
+            transition.name = "t" + str(t)
+            tr_i = Transition("t" + str(t), transition.label)
+            dir_transitions[transition] = tr_i
+            transitions.append(tr_i)
+            tr2lab["t" + str(t)] = transition.label
+
+        inarcs, outarcs = [], []
+        for arc in net.arcs:
+            if isinstance(arc.source, pm4py.objects.petri_net.obj.PetriNet.Place):
+                source = dir_places[arc.source]
+                target = dir_transitions[arc.target]
+                inarcs.append(InArc(source, target))
+            elif isinstance(arc.source, pm4py.objects.petri_net.obj.PetriNet.Transition):
+                source = dir_transitions[arc.source]
+                target = dir_places[arc.target]
+                outarcs.append(OutArc(source, target))
+
+        return Petrinet(net, im, fm, places, transitions, inarcs, outarcs, dir_places, dir_transitions, tr2lab,
+                        pl_start, pl_end, self.get_max_activities())
 
     ####################################################################################################

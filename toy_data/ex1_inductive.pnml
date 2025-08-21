@@ -1,0 +1,115 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<pnml>
+  <net id="imdf_net_1755776079.5239623" type="http://www.pnml.org/version-2009/grammar/pnmlcoremodel">
+    <name>
+      <text>imdf_net_1755776079.5239623</text>
+    </name>
+    <page id="n0">
+      <place id="start">
+        <name>
+          <text>start</text>
+        </name>
+        <initialMarking>
+          <text>1</text>
+        </initialMarking>
+      </place>
+      <place id="end">
+        <name>
+          <text>end</text>
+        </name>
+      </place>
+      <place id="p2">
+        <name>
+          <text>p2</text>
+        </name>
+      </place>
+      <place id="p3">
+        <name>
+          <text>p3</text>
+        </name>
+      </place>
+      <place id="p4">
+        <name>
+          <text>p4</text>
+        </name>
+      </place>
+      <place id="p5">
+        <name>
+          <text>p5</text>
+        </name>
+      </place>
+      <place id="p6">
+        <name>
+          <text>p6</text>
+        </name>
+      </place>
+      <transition id="t0">
+        <name>
+          <text>e</text>
+        </name>
+      </transition>
+      <transition id="t1">
+        <name>
+          <text>f</text>
+        </name>
+      </transition>
+      <transition id="t2">
+        <name>
+          <text>t2</text>
+        </name>
+        <toolspecific tool="ProM" version="6.4" activity="$invisible$" localNodeID="aad49432-40af-4b9a-b2f6-ebb4f71c2b7e"/>
+      </transition>
+      <transition id="t3">
+        <name>
+          <text>c</text>
+        </name>
+      </transition>
+      <transition id="t4">
+        <name>
+          <text>t4</text>
+        </name>
+        <toolspecific tool="ProM" version="6.4" activity="$invisible$" localNodeID="dc725468-e841-40bc-8493-bfcc06fc0a21"/>
+      </transition>
+      <transition id="t5">
+        <name>
+          <text>b</text>
+        </name>
+      </transition>
+      <transition id="t6">
+        <name>
+          <text>a</text>
+        </name>
+      </transition>
+      <transition id="t7">
+        <name>
+          <text>d</text>
+        </name>
+      </transition>
+      <arc id="139806487069312" source="t1" target="end"/>
+      <arc id="139806487069696" source="t2" target="p4"/>
+      <arc id="139806487511440" source="p4" target="t3"/>
+      <arc id="139806487514512" source="t5" target="p3"/>
+      <arc id="139806487068832" source="p6" target="t0"/>
+      <arc id="139806487069600" source="t2" target="p2"/>
+      <arc id="139806487069984" source="p5" target="t7"/>
+      <arc id="139806487513264" source="p5" target="t4"/>
+      <arc id="139806487514800" source="t6" target="p3"/>
+      <arc id="139806487069120" source="p6" target="t1"/>
+      <arc id="139806487069888" source="p3" target="t7"/>
+      <arc id="139806487407824" source="start" target="t2"/>
+      <arc id="139806487514320" source="p2" target="t5"/>
+      <arc id="139806487515088" source="t7" target="p6"/>
+      <arc id="139806487512928" source="t3" target="p5"/>
+      <arc id="139806487069024" source="t0" target="end"/>
+      <arc id="139806487069408" source="t4" target="p4"/>
+      <arc id="139806487514608" source="p2" target="t6"/>
+    </page>
+    <finalmarkings>
+      <marking>
+        <place idref="end">
+          <text>1</text>
+        </place>
+      </marking>
+    </finalmarkings>
+  </net>
+</pnml>
