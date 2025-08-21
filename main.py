@@ -6,9 +6,19 @@ from datetime import datetime as dt
 
 from Optimizer_SPN.unfolding_based_opt import UbOPT
 from Optimizer_SPN.simulation_based_InfBayes import SbIB
+from Optimizer_SPT.spt_opt import SPT_OPT
 from sim.Cosmos import Cosmos
 from log.Eventlog import Eventlog
 
+
+def xp_SPTOPT(filename):
+
+    ev = Eventlog(filename)
+    pt = ev.discover_pt_inductive()
+    spt_opt = SPT_OPT(ev,pt)
+
+    result = spt_opt.estimate_sim(obj_function="rEMD", method="Powell", n=10000, starting_prob=None, nw0=10)
+    print(result)
 
 def xp_SbIB(filename):
 
@@ -47,4 +57,6 @@ if __name__ == '__main__':
     warnings.filterwarnings("ignore")
     #xp_UbOPT("rl_data/BPIC13_open/BPIC13_open.xes")
     #xp_Cosmos("rl_data/BPIC13_open/BPIC13_open.xes")
-    sbib = xp_SbIB("rl_data/BPIC13_open/BPIC13_open.xes")
+    #xp_SbIB("rl_data/BPIC13_open/BPIC13_open.xes")
+    xp_SPTOPT("rl_data/BPIC13_open/BPIC13_open.xes")
+

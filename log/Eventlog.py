@@ -8,6 +8,7 @@ from model.Processtree import Node, Seq, BinaryChoice, Choice, BinaryParallel, P
 
 from pm4py.objects.process_tree.obj import Operator
 
+
 class Event:
 
     def __init__(self, case, activity, timestamp):
