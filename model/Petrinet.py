@@ -175,3 +175,59 @@ class Petrinet:
         pm4py.write_pnml(self.net, self.im, self.fm, filename)
 
     ####################################################################################################
+
+    def gen_gspn(self):
+
+        gspn = "\n"
+
+        # Const
+        for transition in self.transitions:
+            gspn += "const double w_" + transition.name + " = 1;\n"
+        gspn += "\n"
+
+        # NbPlaces
+        gspn += "NbPlaces = " + str(len(self.places)) + ";\n"
+        # NbTransitions
+        gspn += "NbTransitions = " + str(len(self.transitions)) + ";\n\n"
+
+        # PlacesList
+        gspn += "PlacesList = {"
+        for place in self.places:
+            gspn += place.name + ","
+        gspn = gspn[:-1] + "};\n"
+        # TransitionsList
+        gspn += "TransitionsList = {"
+        for transition in self.transitions:
+            gspn += transition.name + ","
+        gspn = gspn[:-1] + "};\n\n"
+
+        # Marking
+        gspn += "Marking = {"
+        for place in self.places:
+            if place.name == "start":
+                gspn += "(start,1);"
+            else:
+                gspn += "(" + place.name + ",0);"
+        gspn += "};\n\n"
+
+        # Transitions
+        gspn += "Transitions = {"
+        for transition in self.transitions:
+            gspn += "(" + transition.name + ",EXPONENTIAL(w_" + transition.name + "),1,1,SINGLE);"
+        gspn += "};\n\n"
+
+        # InArcs
+        gspn += "InArcs = {"
+        for arc in self.inarcs:
+            gspn += "(" + str(arc.source.name) + "," + str(arc.target.name) + "," + str(arc.multiplicity) + ");"
+        gspn += "};\n"
+
+        # OutArcs
+        gspn += "OutArcs = {"
+        for arc in self.outarcs:
+            gspn += "(" + str(arc.source.name) + "," + str(arc.target.name) + "," + str(arc.multiplicity) + ");"
+        gspn += "};\n"
+
+        return gspn
+
+    ####################################################################################################

@@ -442,3 +442,69 @@ class Eventlog:
         return StochasticProcessTree(tree, root, nodes, size_pi, noise_threshold)
 
     ####################################################################################################
+
+    def gen_lha(self, pn):
+
+        activities = self.get_activities()
+
+        lha = "\n"
+
+        # NbVariables
+        lha += "NbVariables = " + str(4 + len([transition.get_name() for transition in pn.get_transitions()
+                                               if transition.label is not None])) + ";\n"
+        # NbLocations
+        lha += "NbLocations = 3;\n\n"
+
+        # Const
+        lha += "const int n = " + str(len(activities)) + ";\n\n"
+
+        # VariablesList
+        lha += "VariablesList = {id,word,cpt,c"
+        for transition in pn.get_transitions():
+            if transition.get_label() is not None:
+                lha += ",c_" + str(transition.get_name())
+        lha += "};\n"
+        # LocationsList
+        lha += "LocationsList = {li,lfa,lfr};\n\n"
+
+        # Variables
+        lha += "PDF(Last(id), 1, 0, " + str(len(self.language)) + ");\n\n"
+
+        # InitialLocations
+        lha += "InitialLocations = {li};\n"
+        # FinalLocations
+        lha += "FinalLocations = {lfa};\n\n"
+
+        # Locations
+        lha += "Locations = {(li,TRUE);(lfa,(end=1));(lfr,TRUE);};\n\n"
+
+        lha += "Edges = {\n"
+
+        # Net edges
+        for transition in pn.get_transitions():
+            if not transition.is_silent():
+                lha += "((li,li),{" + str(transition.get_name()) + "},#,{word=word+" + str(
+                    activities[transition.label]) + "*(n^c), c=c+1, c_" + str(transition.get_name()) + "=c_" + str(
+                    transition.get_name()) + "+1});\n"
+        if len(pn.get_transitions()) != len(activities):
+            lha += "((li,li),{"
+            for transition in pn.get_transitions():
+                if transition.is_silent():
+                    lha += str(transition.get_name()) + ","
+            lha = lha[:-1] + "},#,#);\n"
+
+        # Accepting Edges
+        for trace in self.language:
+            lha += "((li,lfa),#,word=" + str(trace.get_mapping()) + ",{id=" + str(trace.get_tid()) + "});\n"
+
+        # Rejecting Edges
+        lha += "((li,lfr),#,cpt>=" + str(max([len(trace.get_seq()) for trace in self.language])) + ",#);\n"
+        for transition in pn.get_transitions():
+            if not transition.is_silent():
+                lha += "((li,lfr),#,c_" + str(transition.get_name()) + ">=" + str(
+                    self.max_activities[transition.get_label()] + 1) + ",#);\n"
+
+        lha += "};\n"
+        return lha
+
+    ####################################################################################################
