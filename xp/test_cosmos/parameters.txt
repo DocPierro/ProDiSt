@@ -1,0 +1,1 @@
+0 0 0 0 1 1e-06 1 0.99 0.001 1000 2000000 1 0 0 7 tmpuuid 14 xp/test_cosmos 5 0 0 0 0 11 Cosmos/bin/ 25 xp/test_cosmos/gspn1.gspn 23 xp/test_cosmos/lha1.lha 33 xp/test_cosmos/Weight/weights.txt 0 0 0 0  0  0 0 0 0 100 0 0 0 0 0 0 5 prism 0  0  0  0 0  0  1 3 ALL 0 0  0  0 0 28 xp/test_cosmos/Result/result 

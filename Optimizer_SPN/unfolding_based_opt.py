@@ -60,7 +60,10 @@ class UbOPT:
     ###################################################################################################################
 
     def compute_rg(self, w):
-        weights = {transition.get_name(): w[t] for t, transition in enumerate(self.pn.get_transitions())}
+        if isinstance(w, list):
+            weights = {transition.get_name(): w[t] for t, transition in enumerate(self.pn.get_transitions())}
+        elif isinstance(w, dict):
+            weights = w
         for transition in self.rg.transitions:
             denom = 0
             for enabled_transition in transition.from_state.outgoing:
