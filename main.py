@@ -8,12 +8,12 @@ from Optimizer_SPN.unfolding_based_opt import UbOPT
 from Optimizer_SPN.simulation_based_InfBayes import SbIB
 from Optimizer_SPT.spt_opt import SPT_OPT
 from sim.Cosmos import Cosmos
-from log.Eventlog import Eventlog
+from log.Eventlog import EventLog
 
 
 def xp_SPTOPT(filename):
 
-    ev = Eventlog(filename)
+    ev = EventLog(filename)
     pt = ev.discover_pt_inductive()
     spt_opt = SPT_OPT(ev,pt)
 
@@ -22,7 +22,7 @@ def xp_SPTOPT(filename):
 
 def xp_SbIB(filename):
 
-    ev = Eventlog(filename)
+    ev = EventLog(filename)
     pn = ev.discover_pn_inductive()
     sbib = SbIB("test_sbib", ev, pn)
 
@@ -31,7 +31,7 @@ def xp_SbIB(filename):
 
 def xp_Cosmos(filename):
 
-    ev = Eventlog(filename)
+    ev = EventLog(filename)
     pn = ev.discover_pn_inductive()
     cosmos = Cosmos("test_cosmos", ev, pn)
 
@@ -45,7 +45,7 @@ def xp_Cosmos(filename):
 
 def xp_UbOPT(filename):
 
-    ev = Eventlog(filename)
+    ev = EventLog(filename)
     pn = ev.discover_pn_inductive()
     ubopt = UbOPT(ev, pn)
 

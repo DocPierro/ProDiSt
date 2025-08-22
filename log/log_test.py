@@ -1,4 +1,4 @@
-from log.Eventlog import Event, Trace, Eventlog
+from log.Eventlog import Event, Trace, EventLog
 
 
 def test_event():
@@ -29,7 +29,7 @@ def test_trace():
 
 def test_eventlog():
 
-    ev1 = Eventlog("../toy_data/ex1.xes")
+    ev1 = EventLog("../toy_data/ex1.xes")
 
     assert ev1.get_prefixes() == {(), ('a',), ('a', 'c'), ('a', 'c', 'c'), ('a', 'c', 'c', 'd'), ('a', 'c', 'c', 'd', 'e'), ('a', 'c', 'd'), ('a', 'c', 'd', 'e'), ('b',), ('b', 'c'), ('b', 'c', 'd'), ('b', 'c', 'd', 'e'), ('c',), ('c', 'a'), ('c', 'a', 'c'), ('c', 'a', 'c', 'd'), ('c', 'a', 'c', 'd', 'f'), ('c', 'b'), ('c', 'b', 'd'), ('c', 'b', 'd', 'f')}
     assert ev1.get_longest_trace_size() == 5

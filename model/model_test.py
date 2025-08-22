@@ -1,5 +1,5 @@
-from log.Eventlog import Eventlog
-from model.Petrinet import Place, Transition, InArc, OutArc, Petrinet
+from log.Eventlog import EventLog
+from model.Petrinet import Place, Transition, InArc, OutArc, StochasticPetriNet
 
 
 def test_place():
@@ -61,7 +61,7 @@ def test_outarc():
 
 def test1_petrinet():
 
-    ev = Eventlog("../toy_data/ex1.xes")
+    ev = EventLog("../toy_data/ex1.xes")
     pn_alpha = ev.discover_pn_alpha()
     pn_inductive = ev.discover_pn_inductive()
 
@@ -70,7 +70,7 @@ def test1_petrinet():
 
 def test2_petrinet():
 
-    ev = Eventlog("../toy_data/ex1.xes")
+    ev = EventLog("../toy_data/ex1.xes")
     pn_alpha = ev.import_PN_pnml("../toy_data/ex1_alpha.pnml")
     pn_inductive = ev.import_PN_pnml("../toy_data/ex1_inductive.pnml")
 
@@ -79,14 +79,14 @@ def test2_petrinet():
 
 def test1_processtree():
 
-    ev = Eventlog("../toy_data/ex1.xes")
+    ev = EventLog("../toy_data/ex1.xes")
     pt_inductive = ev.discover_pt_inductive()
 
     print(pt_inductive)
 
 def test2_processtree():
 
-    ev = Eventlog("../toy_data/ex1.xes")
+    ev = EventLog("../toy_data/ex1.xes")
     pt_inductive = ev.import_PT_pnml("../toy_data/ex1_inductive.ptml")
 
     print(pt_inductive)

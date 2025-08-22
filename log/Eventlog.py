@@ -3,7 +3,7 @@ import xml.etree.ElementTree as ET
 
 from pm4py.statistics.variants.log import get as variants_module
 
-from model.Petrinet import Place, Transition, InArc, OutArc, Petrinet
+from model.Petrinet import Place, Transition, InArc, OutArc, StochasticPetriNet
 from model.Processtree import Node, Seq, BinaryChoice, Choice, BinaryParallel, Parallel, Loop, StochasticProcessTree
 
 from pm4py.objects.process_tree.obj import Operator
@@ -68,7 +68,7 @@ class Trace:
     def __repr__(self):
         return self.__str__()
 
-class Eventlog:
+class EventLog:
 
     def __init__(self, filename):
 

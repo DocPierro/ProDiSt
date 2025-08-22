@@ -83,7 +83,7 @@ class OutArc(Arc):
     def __init__(self, source, target, multiplicity=1):
         super().__init__(source, target, multiplicity)
 
-class Petrinet:
+class StochasticPetriNet:
 
     def __init__(self, net, im, fm, places, transitions, inarcs, outarcs, dir_places, dir_transitions, tr2lab, start, end, max_activities):
         self.net, self.im, self.fm = net, im, fm
