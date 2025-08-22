@@ -1,0 +1,8 @@
+pm4py~=2.7.6
+numpy~=1.26.4
+scipy~=1.11.3
+sympy~=1.12
+matplotlib~=3.7.2
+pyemd~=1.0.0
+Levenshtein~=0.22.0
+colorama~=0.4.3
