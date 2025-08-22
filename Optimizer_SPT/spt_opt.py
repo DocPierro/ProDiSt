@@ -176,4 +176,5 @@ class SPT_OPT:
 
         print("Execution time: " + str(time.time() - start_time) + " seconds")
 
-        return True
+        self.pt.assign_prob(min.x)
+        return self.pt, min.x

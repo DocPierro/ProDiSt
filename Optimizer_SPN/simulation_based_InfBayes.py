@@ -289,4 +289,6 @@ class SbIB:
 
         self.export_particles(result, njob)
         self.export_results(N, threshold_tolerance, result, sol, weighted_mean, median, elapsed, njob)
-        return result, sol, weighted_mean, median, elapsed
+
+        self.pn.set_weights(sol[-1]["weights"])
+        return self.pn, sol[-1]["weights"]

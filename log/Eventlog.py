@@ -192,7 +192,7 @@ class EventLog:
                 target = dir_places[arc.target]
                 outarcs.append(OutArc(source, target))
 
-        return Petrinet(net, im, fm, places, transitions, inarcs, outarcs, dir_places, dir_transitions, tr2lab,
+        return StochasticPetriNet(net, im, fm, places, transitions, inarcs, outarcs, dir_places, dir_transitions, tr2lab,
                         pl_start, pl_end, self.get_max_activities())
 
     def import_SPN_pnml(self, filename):
@@ -252,7 +252,7 @@ class EventLog:
                 target = dir_places[arc.target]
                 outarcs.append(OutArc(source, target))
 
-        return Petrinet(net, im, fm, places, transitions, inarcs, outarcs, dir_places, dir_transitions, tr2lab,
+        return StochasticPetriNet(net, im, fm, places, transitions, inarcs, outarcs, dir_places, dir_transitions, tr2lab,
                         pl_start, pl_end, self.get_max_activities())
 
     def import_PT_pnml(self, filename):
@@ -344,7 +344,7 @@ class EventLog:
                 target = dir_places[arc.target]
                 outarcs.append(OutArc(source, target))
 
-        return Petrinet(net, im, fm, places, transitions, inarcs, outarcs, dir_places, dir_transitions, tr2lab,
+        return StochasticPetriNet(net, im, fm, places, transitions, inarcs, outarcs, dir_places, dir_transitions, tr2lab,
                         pl_start, pl_end, self.get_max_activities())
 
     def discover_pn_inductive(self, noise_threshold=0):
@@ -395,7 +395,7 @@ class EventLog:
                 target = dir_places[arc.target]
                 outarcs.append(OutArc(source, target))
 
-        return Petrinet(net, im, fm, places, transitions, inarcs, outarcs, dir_places, dir_transitions, tr2lab,
+        return StochasticPetriNet(net, im, fm, places, transitions, inarcs, outarcs, dir_places, dir_transitions, tr2lab,
                         pl_start, pl_end, self.get_max_activities())
 
     def discover_pt_inductive(self, noise_threshold=0):

@@ -60,7 +60,7 @@ class UbOPT:
     ###################################################################################################################
 
     def compute_rg(self, w):
-        if isinstance(w, list):
+        if isinstance(w, np.ndarray) or isinstance(w, list):
             weights = {transition.get_name(): w[t] for t, transition in enumerate(self.pn.get_transitions())}
         elif isinstance(w, dict):
             weights = w
@@ -77,7 +77,7 @@ class UbOPT:
         max_length = max([len(trace.get_seq()) for trace in self.ev.get_language()])
         prefixes = self.ev.build_prefix_set()
 
-        # find initial state in the reachability graph
+        # find the initial state in the reachability graph
         init_state = None
         for state in self.rg.states:
             if state.name == 'start1':
@@ -89,7 +89,7 @@ class UbOPT:
         triples = {}
         triples[(init_state, tuple([]), 0)] = 1
 
-        traces = {}  # all traces that arrives to sink
+        traces = {}  # all traces that arrive to sink
         while not q.empty():
             state, trace, level = q.get()
             prob = triples[(state, tuple(trace), level)]
@@ -302,7 +302,7 @@ class UbOPT:
             KLD, rEMD = self.compute_unfolding(w, "all")
         return (w, KLD, rEMD)
 
-    def estimate(self, obj_function="rEMD", method="Powell", starting_weight=None, nw0=100, memoized=True, derivatives=False):
+    def estimate(self, obj_function="KLD", method="L-BFGS-B", starting_weight=None, nw0=100, memoized=True, derivatives=False):
         np.set_printoptions(threshold=np.inf, linewidth=np.inf)
         sys.setrecursionlimit(8000)
 
@@ -351,4 +351,6 @@ class UbOPT:
 
         print("Execution time: " + str(time.time() - start_time) + " seconds\n")
 
-        return True
+        opt_w = {transition.get_name(): min.x[t] for t, transition in enumerate(self.pn.get_transitions())}
+        self.pn.set_weights(opt_w)
+        return self.pn, opt_w

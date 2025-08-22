@@ -134,24 +134,6 @@ class StochasticPetriNet:
         for transition in self.transitions:
             transition.set_weight(weights[transition.get_name()])
 
-    def view_petri_net(self, w):
-        dot = Digraph(graph_attr={'rankdir': 'LR'})
-        for place in self.net.places:
-            dot.node(place.name, label=place.name, shape="circle")
-        for t,transition in enumerate(self.net.transitions):
-            if transition.label is not None:
-                label = transition.label + " \n (" + str(w[t]) + ")"
-            else:
-                label = transition.name + " \n (" + str(w[t]) + ")"
-            dot.node(transition.name, label=label, shape="box")
-        for arc in self.net.arcs:
-            dot.edge(arc.source.name, arc.target.name)
-        dot.render("pn", format='png', view=True)
-
-    def show_rg(self):
-        gviz = rg_visualizer.apply(self.rg, parameters={rg_visualizer.Variants.VIEW_BASED.value.Parameters.FORMAT: "png"})
-        rg_visualizer.view(gviz)
-
     def __str__(self):
         if self.net is not None:
             pm4py.view_petri_net(self.net, self.im, self.fm)
